@@ -39,7 +39,7 @@ func funcMap() template.FuncMap {
 		},
 		"fileSeparator": func() string {
 			if filepath.Separator == '\\' {
-				return "\\"
+				return "\\\\"
 			}
 			return string(filepath.Separator)
 		},
