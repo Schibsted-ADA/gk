@@ -171,31 +171,7 @@ func (fp *FileParser) parseFieldListAsNamedTypes(list *ast.FieldList) []NamedTyp
 	ntv := []NamedTypeValue{}
 	if list != nil {
 		for i, p := range list.List {
-			var typ string
-			switch t := p.Type.(type) {
-			case *ast.Ident:
-				logrus.Debug("Type Ident, i.e. a built-in type")
-				typ = t.Name
-
-			case *ast.SelectorExpr:
-				logrus.Debug("Type Selector, i.e. a third-party type")
-				selectorIdent, ok := t.X.(*ast.Ident)
-				if !ok {
-					logrus.Debug("Selector X isn't an Ident; very odd, skipping")
-					continue
-				}
-				typ = fmt.Sprintf(fmt.Sprintf("%s.%s", selectorIdent.Name, t.Sel.Name))
-			case *ast.StarExpr:
-				starIndent, ok := t.X.(*ast.Ident)
-				if !ok {
-					logrus.Debug("Selector X isn't an Ident; very odd, skipping")
-					continue
-				}
-				typ = "*" + starIndent.Name
-			default:
-				logrus.Info("Skipping unknown Field Type")
-				continue
-			}
+			typ := fp.getTypeFromExp(p.Type)
 			logrus.Debug(fmt.Sprintf("Type %s", typ))
 
 			// Potentially N names
@@ -215,6 +191,31 @@ func (fp *FileParser) parseFieldListAsNamedTypes(list *ast.FieldList) []NamedTyp
 		}
 	}
 	return ntv
+}
+func (fp *FileParser) getTypeFromExp(e ast.Expr) string {
+	tp := ""
+	switch k := e.(type) {
+	case *ast.Ident:
+		tp = k.Name
+	case *ast.SelectorExpr:
+		logrus.Debug("Type Selector, i.e. a third-party type")
+		selectorIdent := fp.getTypeFromExp(k.X)
+		tp = fmt.Sprintf(fmt.Sprintf("%s.%s", selectorIdent, k.Sel.Name))
+	case *ast.StarExpr:
+		starIndent := fp.getTypeFromExp(k.X)
+		tp = "*" + starIndent
+	case *ast.ArrayType:
+		arrIndent := fp.getTypeFromExp(k.Elt)
+		tp = "[]" + arrIndent
+	case *ast.MapType:
+		key := fp.getTypeFromExp(k.Key)
+		value := fp.getTypeFromExp(k.Value)
+		tp = "map[" + key + "]" + value
+	default:
+		logrus.Info("Type Expresion not supported")
+		return ""
+	}
+	return tp
 }
 func (fp *FileParser) parseFieldListAsMethods(list *ast.FieldList) []Method {
 	mth := []Method{}

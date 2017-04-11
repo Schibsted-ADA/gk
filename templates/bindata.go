@@ -157,7 +157,7 @@ func tmplPartialsEndpoint_funcTmpl() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "tmpl/partials/endpoint_func.tmpl", size: 547, mode: os.FileMode(420), modTime: time.Unix(1491774515, 0)}
+	info := bindataFileInfo{name: "tmpl/partials/endpoint_func.tmpl", size: 547, mode: os.FileMode(420), modTime: time.Unix(1491900788, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
