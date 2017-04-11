@@ -8,6 +8,7 @@ import (
 	"go/format"
 	"go/parser"
 	"go/token"
+	"strings"
 )
 
 type Parser interface {
@@ -181,7 +182,11 @@ func (fp *FileParser) parseFieldListAsNamedTypes(list *ast.FieldList) []NamedTyp
 			}
 			if len(names) == 0 {
 				// Anonymous named type, give it a default name
-				names = append(names, typ[:1]+fmt.Sprintf("%d", i))
+				if strings.HasPrefix(typ, "[]") {
+					names = append(names, typ[2:3]+fmt.Sprintf("%d", i))
+				} else {
+					names = append(names, typ[:1]+fmt.Sprintf("%d", i))
+				}
 			}
 			for _, name := range names {
 				namedType := NewNameType(name, typ)

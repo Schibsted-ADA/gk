@@ -5,6 +5,7 @@ import (
 	"github.com/kujtimiihoxha/gk/templates"
 	"go/format"
 	"golang.org/x/tools/imports"
+	"fmt"
 )
 
 type ParsedSrc interface {
@@ -70,6 +71,7 @@ func (m *Method) String() string {
 		}
 		str = s
 	}
+	fmt.Println(str)
 	dt, err := format.Source([]byte(str))
 	if err != nil {
 		logrus.Panic(err)
