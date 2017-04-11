@@ -12,7 +12,7 @@ type Endpoints struct {
 	FooEndpoint endpoint.Endpoint
 }
 type FooRequest struct {
-	Mp map[string][]*blla.Bar
+	Mp map[[]string][]*blla.Bar
 }
 type FooResponse struct {
 	B0 []blla.Bar
