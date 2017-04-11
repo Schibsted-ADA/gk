@@ -412,7 +412,7 @@ func (sg *ServiceInitGenerator) generateEndpoints(name string, iface *parser.Int
 		file.Structs[0].Vars = append(file.Structs[0].Vars, parser.NewNameType(v.Name+"Endpoint", "endpoint.Endpoint"))
 		reqPrams := []parser.NamedTypeValue{}
 		for _, p := range v.Parameters {
-			if p.Name != "ctx" {
+			if p.Type != "context.Context" {
 				n := strings.ToUpper(string(p.Name[0])) + p.Name[1:]
 				reqPrams = append(reqPrams, parser.NewNameType(n, p.Type))
 			}
