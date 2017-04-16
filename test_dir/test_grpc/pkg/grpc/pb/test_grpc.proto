@@ -3,13 +3,8 @@ package pb;
 // The TestGrpc service definition.
 service TestGrpc {
  rpc Foo (FooRequest) returns (FooReply) {}
- rpc Bar (BarRequest) returns (BarReply) {}
 }
 message FooRequest {
 }
 message FooReply {
-}
-message BarRequest {
-}
-message BarReply {
 }

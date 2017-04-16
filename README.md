@@ -36,9 +36,9 @@ project
 **service.go**
 ```go
 package service
-
+// Implement yor service methods methods.
+// e.x: Foo(ctx context.Context,s string)(s string,err error)
 type HelloService interface {
-	// Write your interface methods
 }
 ```
 Now you need to add the interface methods and initiate your service:
@@ -46,9 +46,10 @@ e.x:
 ```go
 package service
 import "context"
+// Implement yor service methods methods.
+// e.x: Foo(ctx context.Context,s string)(s string,err error)
 type HelloService interface {
-	// Write your interface methods
-	World(ctx context.Context, s string) (rs string, err error)
+	Foo(ctx context.Context,s string)(rs string,err error)
 }
 ```
 than run : 
@@ -56,7 +57,28 @@ than run :
 gk init hello
 ```
 this will create the service `struct` , `methods`, `endpoints`, `transport` .
+![gk new / init](doc/gk-new-init.gif "Create a new service")
+
 The final folder structure is the same as  [addsvc](https://github.com/peterbourgon/go-microservices/tree/master/addsvc) 
+By Default the generator will use `default_transport` setting from `gk.json` and create the transport. If you want to specify
+the transport use `-t` flag
+```bash
+gk init hello -t grpc
+```
+
+## Add other transports
+To add another transport to your existing service use `gk add [transporteType] [serviceName]`   
+e.x adding grpc:
+```bash
+gk add grpc hello
+```
+![gk add grpc](doc/gk-add-grpc.gif "Add Grpc transport")
+
+e.x adding thrift:
+```bash
+gk add thrift hello
+```
+![gk add thrift](doc/gk-add-thrift.gif "Add Thrift transport")
 
 ## I don't like the folder structure!
 
@@ -91,11 +113,9 @@ The example you see here  https://github.com/go-kit/kit/issues/70
 
 ## TODO-s
 
- - Implement support for other transports besides `http`
  - Implement the update commands, this commands would be used to update an existing service e.x add 
- a new request parameter to an endpoint.
+ a new request parameter to an endpoint(Probably not needed).
  - Implement middleware generator (service,endpoint).
- - Implement generator for adding new transports to a service.
  - Implement automatic creation of the service main file.
  - Tests tests tests ...
 ## Warnings

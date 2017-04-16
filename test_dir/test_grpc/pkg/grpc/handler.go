@@ -12,9 +12,9 @@ import (
 
 type grpcServer struct {
 	foo grpctransport.Handler
-	bar grpctransport.Handler
 }
 
+// MakeGRPCServer makes a set of endpoints available as a gRPC server.
 func MakeGRPCServer(endpoints endpoints.Endpoints) (req pb.TestGrpcServer) {
 	req = &grpcServer{
 		foo: grpctransport.NewServer(
@@ -22,21 +22,23 @@ func MakeGRPCServer(endpoints endpoints.Endpoints) (req pb.TestGrpcServer) {
 			DecodeGRPCFooRequest,
 			EncodeGRPCFooResponse,
 		),
-
-		bar: grpctransport.NewServer(
-			endpoints.BarEndpoint,
-			DecodeGRPCBarRequest,
-			EncodeGRPCBarResponse,
-		),
 	}
 	return req
 }
 
+// DecodeGRPCFooRequest is a transport/grpc.DecodeRequestFunc that converts a
+// gRPC request to a user-domain request. Primarily useful in a server.
+// TODO: Do not forget to implement the decoder, you can find an example here :
+// https://github.com/go-kit/kit/blob/master/examples/addsvc/transport_grpc.go#L62-L65
 func DecodeGRPCFooRequest(_ context.Context, grpcReq interface{}) (req interface{}, err error) {
 	err = errors.New("'Foo' Decoder is not impelement")
 	return req, err
 }
 
+// EncodeGRPCFooResponse is a transport/grpc.EncodeResponseFunc that converts a
+// user-domain response to a gRPC reply. Primarily useful in a server.
+// TODO: Do not forget to implement the encoder, you can find an example here :
+// https://github.com/go-kit/kit/blob/master/examples/addsvc/transport_grpc.go#L62-L65
 func EncodeGRPCFooResponse(_ context.Context, grpcReply interface{}) (res interface{}, err error) {
 	err = errors.New("'Foo' Encoder is not impelement")
 	return res, err
@@ -48,24 +50,5 @@ func (s *grpcServer) Foo(ctx oldcontext.Context, req *pb.FooRequest) (rep *pb.Fo
 		return nil, err
 	}
 	rep = rp.(*pb.FooReply)
-	return rep, err
-}
-
-func DecodeGRPCBarRequest(_ context.Context, grpcReq interface{}) (req interface{}, err error) {
-	err = errors.New("'Bar' Decoder is not impelement")
-	return req, err
-}
-
-func EncodeGRPCBarResponse(_ context.Context, grpcReply interface{}) (res interface{}, err error) {
-	err = errors.New("'Bar' Encoder is not impelement")
-	return res, err
-}
-
-func (s *grpcServer) Bar(ctx oldcontext.Context, req *pb.BarRequest) (rep *pb.BarReply, err error) {
-	_, rp, err := s.bar.ServeGRPC(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	rep = rp.(*pb.BarReply)
 	return rep, err
 }

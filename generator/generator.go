@@ -16,7 +16,7 @@ import (
 	"golang.org/x/tools/imports"
 )
 
-var SUPPORTED_TRANSPORTS = []string{"http", "grpc"}
+var SUPPORTED_TRANSPORTS = []string{"http", "grpc", "thrift"}
 
 type ServiceGenerator struct {
 }
@@ -34,7 +34,8 @@ func (sg *ServiceGenerator) Generate(name string) error {
 		return err
 	}
 	f.Interfaces = []parser.Interface{
-		parser.NewInterface(iname, []parser.Method{}),
+		parser.NewInterfaceWithComment(iname, `Implement yor service methods methods.
+		e.x: Foo(ctx context.Context,s string)(rs string, err error)`, []parser.Method{}),
 	}
 	defaultFs := fs.Get()
 
@@ -67,7 +68,6 @@ func (sg *ServiceGenerator) Generate(name string) error {
 	}
 	return fs.NewDefaultFs(path).WriteFile(fname, f.String(), false)
 }
-
 func NewServiceGenerator() *ServiceGenerator {
 	return &ServiceGenerator{}
 }
@@ -161,8 +161,10 @@ func (sg *ServiceInitGenerator) Generate(name string) error {
 		}
 	}
 	if !exists {
-		newMethod := parser.NewMethod(
+		newMethod := parser.NewMethodWithComment(
 			"New",
+			`Get a new instance of the service.
+			If you want to add service middleware this is the place to put them.`,
 			parser.NamedTypeValue{},
 			fmt.Sprintf(`s = &%s{}
 			return s`, stub.Name),
@@ -182,6 +184,7 @@ func (sg *ServiceInitGenerator) Generate(name string) error {
 				exists = true
 			}
 		}
+		m.Comment = fmt.Sprintf(`// Implement the business logic of %s`, m.Name)
 		if !exists {
 			s += "\n" + m.String()
 		}
@@ -212,6 +215,9 @@ func (sg *ServiceInitGenerator) generateTransport(name string, iface *parser.Int
 	case "grpc":
 		logrus.Info("Selected grpc transport.")
 		return sg.generateGRPCTransport(name, iface)
+	case "thrift":
+		logrus.Info("Selected thrift transport.")
+		return sg.generateThriftTransport(name, iface)
 	default:
 		return errors.New(fmt.Sprintf("Transport `%s` not supported", transport))
 	}
@@ -246,8 +252,10 @@ func (sg *ServiceInitGenerator) generateHttpTransport(name string, iface *parser
 		parser.NewNameType("", "\""+endpointsImport+"\""),
 	}
 
-	handlerFile.Methods = append(handlerFile.Methods, parser.NewMethod(
+	handlerFile.Methods = append(handlerFile.Methods, parser.NewMethodWithComment(
 		"NewHTTPHandler",
+		`NewHTTPHandler returns a handler that makes a set of endpoints available on
+			 predefined paths.`,
 		parser.NamedTypeValue{},
 		"m := http.NewServeMux()",
 		[]parser.NamedTypeValue{
@@ -258,13 +266,15 @@ func (sg *ServiceInitGenerator) generateHttpTransport(name string, iface *parser
 		},
 	))
 	for _, m := range iface.Methods {
-		handlerFile.Methods = append(handlerFile.Methods, parser.NewMethod(
+		handlerFile.Methods = append(handlerFile.Methods, parser.NewMethodWithComment(
 			fmt.Sprintf("Decode%sRequest", m.Name),
+			fmt.Sprintf(`Decode%sRequest is a transport/http.DecodeRequestFunc that decodes a
+					 JSON-encoded sum request from the HTTP request body. Primarily useful in a server.`,
+				m.Name),
 			parser.NamedTypeValue{},
 			fmt.Sprintf(`req = endpoints.%sRequest{}
 			err = json.NewDecoder(r.Body).Decode(&r)
-			return req,err
-			`, m.Name),
+			return req,err`, m.Name),
 			[]parser.NamedTypeValue{
 				parser.NewNameType("_", "context.Context"),
 				parser.NewNameType("r", "*http.Request"),
@@ -274,14 +284,15 @@ func (sg *ServiceInitGenerator) generateHttpTransport(name string, iface *parser
 				parser.NewNameType("err", "error"),
 			},
 		))
-		handlerFile.Methods = append(handlerFile.Methods, parser.NewMethod(
+		handlerFile.Methods = append(handlerFile.Methods, parser.NewMethodWithComment(
 			fmt.Sprintf("Encode%sResponse", m.Name),
+			fmt.Sprintf(`Encode%sResponse is a transport/http.EncodeResponseFunc that encodes
+				the response as JSON to the response writer. Primarily useful in a server.`, m.Name),
 			parser.NamedTypeValue{},
 			` w.Header().Set("Content-Type", "application/json; charset=utf-8")
 			err = json.NewEncoder(w).Encode(response)
 			json.NewEncoder(w).Encode(response)
-			return err
-			`,
+			return err`,
 			[]parser.NamedTypeValue{
 				parser.NewNameType("_", "context.Context"),
 				parser.NewNameType("w", "http.ResponseWriter"),
@@ -397,11 +408,12 @@ func (sg *ServiceInitGenerator) generateGRPCTransport(name string, iface *parser
 		if err != nil {
 			return err
 		}
-		logrus.Info("--------------------------------------------------------------------")
-		logrus.Info("To create the create the grpc transport please create your protobuf.")
-		logrus.Info("Than follow the instructions in compile.bat and compile the .proto file.")
-		logrus.Infof("After the file is compiled run `gk init grpc %s`.", name)
-		logrus.Info("--------------------------------------------------------------------")
+		logrus.Warn("--------------------------------------------------------------------")
+		logrus.Warn("The service is still not ready!!")
+		logrus.Warn("To create the grpc transport please create your protobuf.")
+		logrus.Warn("Than follow the instructions in compile.bat and compile the .proto file.")
+		logrus.Warnf("After the file is compiled run `gk init grpc %s`.", name)
+		logrus.Warn("--------------------------------------------------------------------")
 		return defaultFs.WriteFile(tfile, cmpTmpl, false)
 	} else {
 		tfile := path + defaultFs.FilePathSeparator() + "compile.sh"
@@ -411,11 +423,115 @@ func (sg *ServiceInitGenerator) generateGRPCTransport(name string, iface *parser
 		if err != nil {
 			return err
 		}
-		logrus.Info("--------------------------------------------------------------------")
-		logrus.Info("To create the create the grpc transport please create your protobuf.")
-		logrus.Info("Than follow the instructions in compile.sh and compile the .proto file.")
-		logrus.Infof("After the file is compiled run `gk init grpc %s`.", name)
-		logrus.Info("--------------------------------------------------------------------")
+		logrus.Warn("--------------------------------------------------------------------")
+		logrus.Warn("The service is still not ready!!")
+		logrus.Warn("To create the grpc transport please create your protobuf.")
+		logrus.Warn("Than follow the instructions in compile.sh and compile the .proto file.")
+		logrus.Warnf("After the file is compiled run `gk init grpc %s`.", name)
+		logrus.Warn("--------------------------------------------------------------------")
+		return defaultFs.WriteFile(tfile, cmpTmpl, false)
+	}
+}
+func (sg *ServiceInitGenerator) generateThriftTransport(name string, iface *parser.Interface) error {
+	logrus.Info("Generating thrift transport...")
+	te := template.NewEngine()
+	defaultFs := fs.Get()
+	model := map[string]interface{}{
+		"Name":    utils.ToUpperFirstCamelCase(name),
+		"Methods": []map[string]string{},
+	}
+	mthds := []map[string]string{}
+	for _, v := range iface.Methods {
+		mthds = append(mthds, map[string]string{
+			"Name":    v.Name,
+			"Request": v.Name + "Request",
+			"Reply":   v.Name + "Reply",
+		})
+	}
+	model["Methods"] = mthds
+	path, err := te.ExecuteString(viper.GetString("transport.path"), map[string]string{
+		"ServiceName":   name,
+		"TransportType": "thrift",
+	})
+	if err != nil {
+		return err
+	}
+	b, err := defaultFs.Exists(path)
+	if err != nil {
+		return err
+	}
+	fname := utils.ToLowerSnakeCase(name)
+	tfile := path + defaultFs.FilePathSeparator() + fname + ".thrift"
+	if b {
+		fex, err := defaultFs.Exists(tfile)
+		if err != nil {
+			return err
+		}
+		if fex {
+			logrus.Errorf("Thrift for service `%s` exist", name)
+			return nil
+		}
+	} else {
+		err = defaultFs.MkdirAll(path)
+		if err != nil {
+			return err
+		}
+	}
+	protoTmpl, err := te.Execute("svc.thrift", model)
+	if err != nil {
+		return err
+	}
+	err = defaultFs.WriteFile(tfile, protoTmpl, false)
+	if err != nil {
+		return err
+	}
+	gosrc := utils.GetGOPATH() + "/src/"
+	gosrc = strings.Replace(gosrc, "\\", "/", -1)
+	pwd, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+	if viper.GetString("gk_folder") != "" {
+		pwd += "/" + viper.GetString("gk_folder")
+	}
+	pwd = strings.Replace(pwd, "\\", "/", -1)
+	projectPath := strings.Replace(pwd, gosrc, "", 1)
+	if err != nil {
+		return err
+	}
+	pkg := strings.Replace(path, "\\", "/", -1)
+	pkg = projectPath + "/" + pkg
+	if runtime.GOOS == "windows" {
+		tfile := path + defaultFs.FilePathSeparator() + "compile.bat"
+		cmpTmpl, err := te.Execute("thrift_compile.bat", map[string]string{
+			"Name":    fname,
+			"Package": pkg,
+		})
+		if err != nil {
+			return err
+		}
+		logrus.Warn("--------------------------------------------------------------------")
+		logrus.Warn("The service is still not ready!!")
+		logrus.Warn("To create the thrift transport please create your thrift file.")
+		logrus.Warn("Than follow the instructions in compile.bat and compile the .thrift file.")
+		logrus.Warnf("After the file is compiled run `gk init thrift %s`.", name)
+		logrus.Warn("--------------------------------------------------------------------")
+		return defaultFs.WriteFile(tfile, cmpTmpl, false)
+	} else {
+		tfile := path + defaultFs.FilePathSeparator() + "compile.sh"
+		cmpTmpl, err := te.Execute("thrift_compile.sh", map[string]string{
+			"Name":    fname,
+			"Package": pkg,
+		})
+		if err != nil {
+			return err
+		}
+		logrus.Warn("--------------------------------------------------------------------")
+		logrus.Warn("The service is still not ready!!")
+		logrus.Warn("To create the thrift transport please create your thrift file.")
+		logrus.Warn("Than follow the instructions in compile.sh and compile the .thrift file.")
+		logrus.Warnf("After the file is compiled run `gk init thrift %s`.", name)
+		logrus.Warn("--------------------------------------------------------------------")
 		return defaultFs.WriteFile(tfile, cmpTmpl, false)
 	}
 }
@@ -459,7 +575,12 @@ func (sg *ServiceInitGenerator) generateEndpoints(name string, iface *parser.Int
 	file := parser.NewFile()
 	file.Package = "endpoints"
 	file.Structs = []parser.Struct{
-		parser.NewStruct("Endpoints", []parser.NamedTypeValue{}),
+		parser.NewStructWithComment(
+			"Endpoints",
+			`Endpoints collects all of the endpoints that compose an add service. It's
+				meant to be used as a helper struct, to collect all of the endpoints into a
+				single parameter.`,
+			[]parser.NamedTypeValue{}),
 	}
 	gosrc := utils.GetGOPATH() + "/src/"
 	gosrc = strings.Replace(gosrc, "\\", "/", -1)
@@ -524,8 +645,10 @@ func (sg *ServiceInitGenerator) generateEndpoints(name string, iface *parser.Int
 		if err != nil {
 			return err
 		}
-		file.Methods = append(file.Methods, parser.NewMethod(
+		file.Methods = append(file.Methods, parser.NewMethodWithComment(
 			"Make"+v.Name+"Endpoint",
+			fmt.Sprintf(`Make%sEndpoint returns an endpoint that invokes Sum on the service.
+				  Primarily useful in a server.`, v.Name),
 			parser.NamedTypeValue{},
 			tRes,
 			[]parser.NamedTypeValue{
@@ -605,7 +728,6 @@ func (sg *GRPCInitGenerator) Generate(name string) error {
 		return err
 	}
 	sfile = path + defaultFs.FilePathSeparator() + "pb" + defaultFs.FilePathSeparator() + utils.ToLowerSnakeCase(name) + ".pb.go"
-	logrus.Info(sfile)
 	b, err = defaultFs.Exists(sfile)
 	if err != nil {
 		return err
@@ -644,8 +766,9 @@ func (sg *GRPCInitGenerator) Generate(name string) error {
 		parser.NewNameType("grpctransport", "\"github.com/go-kit/kit/transport/grpc\""),
 	}
 	grpcStruct := parser.NewStruct("grpcServer", []parser.NamedTypeValue{})
-	handler.Methods = append(handler.Methods, parser.NewMethod(
+	handler.Methods = append(handler.Methods, parser.NewMethodWithComment(
 		"MakeGRPCServer",
+		`MakeGRPCServer makes a set of endpoints available as a gRPC server.`,
 		parser.NamedTypeValue{},
 		`req = &grpcServer{`,
 		[]parser.NamedTypeValue{
@@ -660,8 +783,15 @@ func (sg *GRPCInitGenerator) Generate(name string) error {
 			utils.ToLowerFirstCamelCase(v.Name),
 			"grpctransport.Handler",
 		))
-		handler.Methods = append(handler.Methods, parser.NewMethod(
+		handler.Methods = append(handler.Methods, parser.NewMethodWithComment(
 			"DecodeGRPC"+v.Name+"Request",
+			fmt.Sprintf(
+				`DecodeGRPC%sRequest is a transport/grpc.DecodeRequestFunc that converts a
+				gRPC request to a user-domain request. Primarily useful in a server.
+				TODO: Do not forget to implement the decoder, you can find an example here :
+				https://github.com/go-kit/kit/blob/master/examples/addsvc/transport_grpc.go#L62-L65`,
+				v.Name,
+			),
 			parser.NamedTypeValue{},
 			fmt.Sprintf(`err = errors.New("'%s' Decoder is not impelement")
 			return req, err`, v.Name),
@@ -674,8 +804,15 @@ func (sg *GRPCInitGenerator) Generate(name string) error {
 				parser.NewNameType("err", "error"),
 			},
 		))
-		handler.Methods = append(handler.Methods, parser.NewMethod(
+		handler.Methods = append(handler.Methods, parser.NewMethodWithComment(
 			"EncodeGRPC"+v.Name+"Response",
+			fmt.Sprintf(
+				`EncodeGRPC%sResponse is a transport/grpc.EncodeResponseFunc that converts a
+					user-domain response to a gRPC reply. Primarily useful in a server.
+					TODO: Do not forget to implement the encoder, you can find an example here :
+					https://github.com/go-kit/kit/blob/master/examples/addsvc/transport_grpc.go#L62-L65`,
+				v.Name,
+			),
 			parser.NamedTypeValue{},
 			fmt.Sprintf(`err = errors.New("'%s' Encoder is not impelement")
 			return res, err`, v.Name),
@@ -728,10 +865,241 @@ func (sg *GRPCInitGenerator) Generate(name string) error {
 		return err
 	}
 	sfile = path + defaultFs.FilePathSeparator() + fname
-	return defaultFs.WriteFile(sfile, handler.String(), false)
+	err = defaultFs.WriteFile(sfile, handler.String(), false)
+	if err != nil {
+		return err
+	}
+	logrus.Warn("---------------------------------------------------------------------------------------")
+	logrus.Warn("The generator does not implement the Decoding and Encoding of the grpc request/response")
+	logrus.Warn("Before using the service don't forget to implement those.")
+	logrus.Warn("---------------------------------------------------------------------------------------")
+	return nil
 }
 func NewGRPCInitGenerator() *GRPCInitGenerator {
 	return &GRPCInitGenerator{}
+}
+
+type ThriftInitGenerator struct {
+}
+
+func (sg *ThriftInitGenerator) Generate(name string) error {
+	te := template.NewEngine()
+	defaultFs := fs.Get()
+	path, err := te.ExecuteString(viper.GetString("service.path"), map[string]string{
+		"ServiceName": name,
+	})
+	if err != nil {
+		return err
+	}
+	fname, err := te.ExecuteString(viper.GetString("service.file_name"), map[string]string{
+		"ServiceName": name,
+	})
+	if err != nil {
+		return err
+	}
+	sfile := path + defaultFs.FilePathSeparator() + fname
+	b, err := defaultFs.Exists(sfile)
+	if err != nil {
+		return err
+	}
+	iname, err := te.ExecuteString(viper.GetString("service.interface_name"), map[string]string{
+		"ServiceName": name,
+	})
+	if err != nil {
+		return err
+	}
+	if !b {
+		return errors.New(fmt.Sprintf("Service %s was not found", name))
+	}
+	p := parser.NewFileParser()
+	s, err := defaultFs.ReadFile(sfile)
+	if err != nil {
+		return err
+	}
+	f, err := p.Parse([]byte(s))
+	if err != nil {
+		return err
+	}
+	var iface *parser.Interface
+	for _, v := range f.Interfaces {
+		if v.Name == iname {
+			iface = &v
+		}
+	}
+	if iface == nil {
+		return errors.New(fmt.Sprintf("Could not find the service interface in `%s`", sfile))
+	}
+	if len(iface.Methods) == 0 {
+		return errors.New("The service has no method please implement the interface methods")
+	}
+	path, err = te.ExecuteString(viper.GetString("transport.path"), map[string]string{
+		"ServiceName":   name,
+		"TransportType": "thrift",
+	})
+	if err != nil {
+		return err
+	}
+	sfile = path + defaultFs.FilePathSeparator() + "gen-go" + defaultFs.FilePathSeparator() +
+		utils.ToLowerSnakeCase(name) + defaultFs.FilePathSeparator() +
+		utils.ToLowerSnakeCase(name) + ".go"
+	b, err = defaultFs.Exists(sfile)
+	if err != nil {
+		return err
+	}
+	if !b {
+		return errors.New("Could not find the compiled thrift of the service")
+	}
+	gosrc := utils.GetGOPATH() + "/src/"
+	gosrc = strings.Replace(gosrc, "\\", "/", -1)
+	pwd, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+	if viper.GetString("gk_folder") != "" {
+		pwd += "/" + viper.GetString("gk_folder")
+	}
+	pwd = strings.Replace(pwd, "\\", "/", -1)
+	projectPath := strings.Replace(pwd, gosrc, "", 1)
+	thriftImport := projectPath + "/" + path + "/" + "gen-go" +
+		"/" + utils.ToLowerSnakeCase(name)
+	enpointsPath, err := te.ExecuteString(viper.GetString("endpoints.path"), map[string]string{
+		"ServiceName": name,
+	})
+	if err != nil {
+		return err
+	}
+	enpointsPath = strings.Replace(enpointsPath, "\\", "/", -1)
+	endpointsImport := projectPath + "/" + enpointsPath
+	handler := parser.NewFile()
+	handler.Package = "thrift"
+	handler.Imports = []parser.NamedTypeValue{
+		parser.NewNameType("", "\"context\""),
+		parser.NewNameType("", "\"errors\""),
+		parser.NewNameType("", "\"github.com/go-kit/kit/endpoint\""),
+		parser.NewNameType(
+			fmt.Sprintf("thrift%s", utils.ToUpperFirstCamelCase(name)),
+			fmt.Sprintf("\"%s\"", thriftImport),
+		),
+		parser.NewNameType("", fmt.Sprintf("\"%s\"", endpointsImport)),
+	}
+	thriftStruct := parser.NewStruct("thriftServer", []parser.NamedTypeValue{
+		parser.NewNameType("ctx", "context.Context"),
+	})
+	handler.Methods = append(handler.Methods, parser.NewMethodWithComment(
+		"MakeThriftHandler",
+		`MakeThriftHandler makes a set of endpoints available as a thrift server.`,
+		parser.NamedTypeValue{},
+		`req = &thriftServer{
+				ctx:    ctx,`,
+		[]parser.NamedTypeValue{
+			parser.NewNameType("ctx", "context.Context"),
+			parser.NewNameType("endpoints", "endpoints.Endpoints"),
+		},
+		[]parser.NamedTypeValue{
+			parser.NewNameType("req", fmt.Sprintf("thrift%s.%sService",
+				utils.ToUpperFirstCamelCase(name), utils.ToUpperFirstCamelCase(name))),
+		},
+	))
+	for _, v := range iface.Methods {
+		thriftStruct.Vars = append(thriftStruct.Vars, parser.NewNameType(
+			utils.ToLowerFirstCamelCase(v.Name),
+			"endpoint.Endpoint",
+		))
+		handler.Methods = append(handler.Methods, parser.NewMethodWithComment(
+			"DecodeThrift"+v.Name+"Request",
+			fmt.Sprintf(
+				`DecodeThrift%sRequest is a func that converts a
+				thrift request to a user-domain request. Primarily useful in a server.
+				TODO: Do not forget to implement the decoder.`,
+				v.Name,
+			),
+			parser.NamedTypeValue{},
+			fmt.Sprintf(`err = errors.New("'%s' Decoder is not impelement")
+			return req, err`, v.Name),
+			[]parser.NamedTypeValue{
+				parser.NewNameType("r", fmt.Sprintf("*thrift%s.%sRequest",
+					utils.ToUpperFirstCamelCase(name), utils.ToUpperFirstCamelCase(v.Name))),
+			},
+			[]parser.NamedTypeValue{
+				parser.NewNameType("req", fmt.Sprintf("endpoints.%sRequest",
+					utils.ToUpperFirstCamelCase(v.Name))),
+				parser.NewNameType("err", "error"),
+			},
+		))
+		handler.Methods = append(handler.Methods, parser.NewMethodWithComment(
+			"EncodeThrift"+v.Name+"Response",
+			fmt.Sprintf(
+				`EncodeThrift%sResponse is a func that converts a
+					user-domain response to a thrift reply. Primarily useful in a server.
+					TODO: Do not forget to implement the encoder.`,
+				v.Name,
+			),
+			parser.NamedTypeValue{},
+			fmt.Sprintf(`err = errors.New("'%s' Encoder is not impelement")
+			return rep, err`, v.Name),
+			[]parser.NamedTypeValue{
+				parser.NewNameType("reply", "interface{}"),
+			},
+			[]parser.NamedTypeValue{
+				parser.NewNameType("rep", fmt.Sprintf("thrift%s.%sReply",
+					utils.ToUpperFirstCamelCase(name), utils.ToUpperFirstCamelCase(v.Name))),
+				parser.NewNameType("err", "error"),
+			},
+		))
+		handler.Methods = append(handler.Methods, parser.NewMethod(
+			v.Name,
+			parser.NewNameType("s", "*thriftServer"),
+			fmt.Sprintf(
+				`request,err:=DecodeThrift%sRequest(req)
+					if err != nil {
+						return nil, err
+					}
+					response, err := s.%s(s.ctx, request)
+					if err != nil {
+						return nil, err
+					}
+					r,err := EncodeThrift%sResponse(response)
+					rep = &r
+					return rep, err`,
+				utils.ToUpperFirstCamelCase(v.Name),
+				utils.ToLowerFirstCamelCase(v.Name),
+				utils.ToUpperFirstCamelCase(v.Name),
+			),
+			[]parser.NamedTypeValue{
+				parser.NewNameType("req", fmt.Sprintf("*thrift%s.%sRequest", utils.ToUpperFirstCamelCase(name), utils.ToUpperFirstCamelCase(v.Name))),
+			},
+			[]parser.NamedTypeValue{
+				parser.NewNameType("rep", fmt.Sprintf("*thrift%s.%sReply", utils.ToUpperFirstCamelCase(name), utils.ToUpperFirstCamelCase(v.Name))),
+				parser.NewNameType("err", "error"),
+			},
+		))
+		handler.Methods[0].Body += "\n" + fmt.Sprintf(`%s :  endpoints.%sEndpoint,`,
+			utils.ToLowerFirstCamelCase(v.Name), utils.ToUpperFirstCamelCase(v.Name))
+	}
+	handler.Methods[0].Body += `
+	}
+	return req`
+	handler.Structs = append(handler.Structs, thriftStruct)
+	fname, err = te.ExecuteString(viper.GetString("transport.file_name"), map[string]string{
+		"ServiceName":   name,
+		"TransportType": "thrift",
+	})
+	if err != nil {
+		return err
+	}
+	sfile = path + defaultFs.FilePathSeparator() + fname
+	err = defaultFs.WriteFile(sfile, handler.String(), false)
+	if err != nil {
+		return err
+	}
+	logrus.Warn("---------------------------------------------------------------------------------------")
+	logrus.Warn("The generator does not implement the Decoding and Encoding of the thrift request/response")
+	logrus.Warn("Before using the service don't forget to implement those.")
+	logrus.Warn("---------------------------------------------------------------------------------------")
+	return nil
+}
+func NewThriftInitGenerator() *ThriftInitGenerator {
+	return &ThriftInitGenerator{}
 }
 
 type AddGRPCGenerator struct {
@@ -852,4 +1220,64 @@ func (sg *AddHttpGenerator) Generate(name string) error {
 }
 func NewAddHttpGenerator() *AddHttpGenerator {
 	return &AddHttpGenerator{}
+}
+
+type AddThriftGenerator struct {
+}
+
+func (sg *AddThriftGenerator) Generate(name string) error {
+	g := NewServiceInitGenerator()
+	te := template.NewEngine()
+	defaultFs := fs.Get()
+	path, err := te.ExecuteString(viper.GetString("service.path"), map[string]string{
+		"ServiceName": name,
+	})
+	if err != nil {
+		return err
+	}
+	fname, err := te.ExecuteString(viper.GetString("service.file_name"), map[string]string{
+		"ServiceName": name,
+	})
+	if err != nil {
+		return err
+	}
+	sfile := path + defaultFs.FilePathSeparator() + fname
+	b, err := defaultFs.Exists(sfile)
+	if err != nil {
+		return err
+	}
+	iname, err := te.ExecuteString(viper.GetString("service.interface_name"), map[string]string{
+		"ServiceName": name,
+	})
+	if err != nil {
+		return err
+	}
+	if !b {
+		return errors.New(fmt.Sprintf("Service %s was not found", name))
+	}
+	p := parser.NewFileParser()
+	s, err := defaultFs.ReadFile(sfile)
+	if err != nil {
+		return err
+	}
+	f, err := p.Parse([]byte(s))
+	if err != nil {
+		return err
+	}
+	var iface *parser.Interface
+	for _, v := range f.Interfaces {
+		if v.Name == iname {
+			iface = &v
+		}
+	}
+	if iface == nil {
+		return errors.New(fmt.Sprintf("Could not find the service interface in `%s`", sfile))
+	}
+	if len(iface.Methods) == 0 {
+		return errors.New("The service has no method please implement the interface methods")
+	}
+	return g.generateThriftTransport(name, iface)
+}
+func NewAddThriftGenerator() *AddThriftGenerator {
+	return &AddThriftGenerator{}
 }
