@@ -57,7 +57,7 @@ than run :
 gk init hello
 ```
 this will create the service `struct` , `methods`, `endpoints`, `transport` .
-![gk new / init](https://drive.google.com/open?id=0B11R03qTqELWbk9nYXRtOTRQdDg "Create a new service")
+[Example GIF](https://drive.google.com/open?id=0B11R03qTqELWbk9nYXRtOTRQdDg)
 
 The final folder structure is the same as  [addsvc](https://github.com/peterbourgon/go-microservices/tree/master/addsvc) 
 By Default the generator will use `default_transport` setting from `gk.json` and create the transport. If you want to specify
@@ -72,13 +72,13 @@ e.x adding grpc:
 ```bash
 gk add grpc hello
 ```
-![gk add grpc](https://drive.google.com/open?id=0B11R03qTqELWZE9mcEhZVHhFWFk "Add Grpc transport")
+[Example GIF](https://drive.google.com/open?id=0B11R03qTqELWZE9mcEhZVHhFWFk)
 
 e.x adding thrift:
 ```bash
 gk add thrift hello
 ```
-![gk add thrift](https://drive.google.com/open?id=0B11R03qTqELWbE9VeFB2ZDdhb2c "Add Thrift transport")
+[Example GIF](https://drive.google.com/open?id=0B11R03qTqELWbE9VeFB2ZDdhb2c)
 
 ## I don't like the folder structure!
 
@@ -110,6 +110,9 @@ Global Flags:
 ```
 ## What is working
 The example you see here  https://github.com/go-kit/kit/issues/70
+
+## Examples
+You can find examples under the `test_dir`
 
 ## TODO-s
 
