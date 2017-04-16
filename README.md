@@ -57,6 +57,7 @@ than run :
 gk init hello
 ```
 this will create the service `struct` , `methods`, `endpoints`, `transport` .
+
 [Example GIF](https://drive.google.com/open?id=0B11R03qTqELWbk9nYXRtOTRQdDg)
 
 The final folder structure is the same as  [addsvc](https://github.com/peterbourgon/go-microservices/tree/master/addsvc) 
