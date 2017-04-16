@@ -57,7 +57,7 @@ than run :
 gk init hello
 ```
 this will create the service `struct` , `methods`, `endpoints`, `transport` .
-![gk new / init](doc/gk-new-init.gif "Create a new service")
+![gk new / init](https://drive.google.com/open?id=0B11R03qTqELWbk9nYXRtOTRQdDg "Create a new service")
 
 The final folder structure is the same as  [addsvc](https://github.com/peterbourgon/go-microservices/tree/master/addsvc) 
 By Default the generator will use `default_transport` setting from `gk.json` and create the transport. If you want to specify
@@ -72,13 +72,13 @@ e.x adding grpc:
 ```bash
 gk add grpc hello
 ```
-![gk add grpc](doc/gk-add-grpc.gif "Add Grpc transport")
+![gk add grpc](https://drive.google.com/open?id=0B11R03qTqELWZE9mcEhZVHhFWFk "Add Grpc transport")
 
 e.x adding thrift:
 ```bash
 gk add thrift hello
 ```
-![gk add thrift](doc/gk-add-thrift.gif "Add Thrift transport")
+![gk add thrift](https://drive.google.com/open?id=0B11R03qTqELWbE9VeFB2ZDdhb2c "Add Thrift transport")
 
 ## I don't like the folder structure!
 
@@ -133,4 +133,6 @@ export GK_FOLDER="test_dir"
 ```
 Create a folder in the `gk` repository called `test_dir`, now every time you run `go run main.go [anything]`
 `gk` will treat `test_dir` as the project root.
+
+If you edit the templates you need to run `compile.sh` inside the templates folder.
  
