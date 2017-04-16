@@ -1,5 +1,4 @@
 # Go-Kit generator.
-### This generator is still a work in progress
 Go-kit generator is a cli application that generates boilerplate code for your go-kit services.
 
 ## Why?
@@ -125,7 +124,6 @@ You can find examples under the `test_dir`
 ## Warnings
 
 - I only tested this on the mac, should work on other os-s but I have not tested it, I would appreciate feedback on this. 
-- Commands may change in the future, this project is still a work in progress.
 ## Contribute
 Thanks a lot for contributing. 
 
