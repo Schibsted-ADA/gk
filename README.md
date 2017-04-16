@@ -37,7 +37,7 @@ project
 ```go
 package service
 // Implement yor service methods methods.
-// e.x: Foo(ctx context.Context,s string)(s string,err error)
+// e.x: Foo(ctx context.Context,s string)(rs string,err error)
 type HelloService interface {
 }
 ```
@@ -47,7 +47,7 @@ e.x:
 package service
 import "context"
 // Implement yor service methods methods.
-// e.x: Foo(ctx context.Context,s string)(s string,err error)
+// e.x: Foo(ctx context.Context,s string)(rs string,err error)
 type HelloService interface {
 	Foo(ctx context.Context,s string)(rs string,err error)
 }
