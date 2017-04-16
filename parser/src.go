@@ -43,7 +43,6 @@ type NamedTypeValue struct {
 }
 
 func (f *File) String() string {
-
 	s, err := template.NewEngine().Execute("file", f)
 	if err != nil {
 		logrus.Panic(err)

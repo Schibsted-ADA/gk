@@ -1,13 +1,13 @@
 package parser
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func TestName(t *testing.T) {
 	p := NewFileParser()
-	v,_:=p.Parse([]byte(`
+	v, _ := p.Parse([]byte(`
 	package service
 type ABC struct {
 

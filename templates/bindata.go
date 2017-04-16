@@ -15,6 +15,9 @@
 // tmpl/partials/struct.tmpl
 // tmpl/partials/struct_function.tmpl
 // tmpl/partials/vars.tmpl
+// tmpl/proto.pb.tmpl
+// tmpl/proto_compile.bat.tmpl
+// tmpl/proto_compile.sh.tmpl
 // DO NOT EDIT!
 
 package template
@@ -382,6 +385,66 @@ func tmplPartialsVarsTmpl() (*asset, error) {
 	return a, nil
 }
 
+var _tmplProtoPbTmpl = "\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x7c\x8e\xc1\x0a\x82\x40\x10\x86\xef\xfb\x14\x83\x78\x28\x08\x3d\x74\x4b\x7c\x84\x3a\x44\x2f\xb0\xe9\xa4\x4b\xb9\xbb\xed\xac\x92\x0c\xf3\xee\xa1\x64\x51\x87\x8e\xf3\x7f\x1f\x1f\x43\xa3\x8d\xfa\x01\x25\x24\x3e\xb8\xe8\xb6\x49\xa1\xbc\xae\xae\xba\x41\xf0\xe7\x42\xe5\x39\x9c\x5a\x04\xe6\xec\xa0\x3b\x14\x01\xc2\x30\x98\x0a\xa1\xc6\x8b\xb1\x26\x1a\x67\x33\xb5\x6c\x1f\x8b\x15\x73\xd0\xb6\x41\x48\xcd\x26\x1d\x60\x57\x42\xb6\xc7\xd8\xba\x9a\x44\x20\xf8\x0a\x98\xd3\x61\xb1\x57\xf3\x71\xc4\x7b\x8f\x14\x45\xd6\x10\x30\xf6\xc1\xd2\x1b\xf8\xdb\x38\xcd\x2c\x8a\x19\x6d\x2d\x22\xff\xfa\x1d\x12\x4d\xff\x7f\x57\x81\x95\xa8\x1f\x34\x77\x67\xf0\xea\x3e\x03\x00\x00\xff\xff\x30\xc0\xb8\x3f\x0e\x01\x00\x00"
+
+func tmplProtoPbTmplBytes() ([]byte, error) {
+	return bindataRead(
+		_tmplProtoPbTmpl,
+		"tmpl/proto.pb.tmpl",
+	)
+}
+
+func tmplProtoPbTmpl() (*asset, error) {
+	bytes, err := tmplProtoPbTmplBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "tmpl/proto.pb.tmpl", size: 270, mode: os.FileMode(420), modTime: time.Unix(1492288367, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _tmplProto_compileBatTmpl = "\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x6c\xce\xb1\x4a\x04\x31\x10\xc6\xf1\x7e\x9f\x62\x1e\xc0\x24\x85\x5d\xe0\x6a\xb1\xb1\x11\x6b\x99\xdd\x1b\xe7\x02\xd9\x4c\xc8\x4c\x44\x58\xf6\xdd\x25\x39\x41\x04\x9b\x10\x86\x3f\x3f\xbe\x18\xe1\xb9\xa8\x61\xce\x50\x9b\x98\x3c\xfa\x25\x46\xb8\x99\x55\x8d\x21\x70\xb2\x5b\x5f\xfd\x26\x7b\x60\x11\xce\x14\x66\xb4\xf6\x8f\xd0\x28\x13\x2a\xe9\xc8\xdf\xea\x15\x8d\xee\xc0\x06\x4f\x02\x6b\x2a\xd7\x54\x58\xe1\x33\xe1\x08\x80\x05\x98\x0c\x5c\x87\x3f\x64\xc6\xc2\xbf\xe4\x31\x7f\x0f\x77\xc6\x31\x15\xc7\x72\x2e\x31\x0e\xe1\x95\x08\x30\xab\x4c\xed\xbf\x79\xad\x6e\xf3\x71\x2c\xc1\x1a\x51\xd8\x51\x8d\x5a\xa0\x2f\xdc\x6b\x26\x5d\x96\x9f\x79\xc7\xe1\x5f\x70\xa7\xf3\xf4\xf3\x00\xce\xb1\xbc\x4b\xb7\x4b\xcd\x9d\x53\xd1\xcb\x50\xa2\xff\x0e\x00\x00\xff\xff\x01\x54\xb0\xf4\x19\x01\x00\x00"
+
+func tmplProto_compileBatTmplBytes() ([]byte, error) {
+	return bindataRead(
+		_tmplProto_compileBatTmpl,
+		"tmpl/proto_compile.bat.tmpl",
+	)
+}
+
+func tmplProto_compileBatTmpl() (*asset, error) {
+	bytes, err := tmplProto_compileBatTmplBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "tmpl/proto_compile.bat.tmpl", size: 281, mode: os.FileMode(420), modTime: time.Unix(1492288812, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _tmplProto_compileShTmpl = "\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x6c\x8f\xbd\x6a\x2b\x31\x14\x84\x7b\x3d\xc5\x5c\xb6\xbd\x2b\x15\xe9\x6c\x5c\x87\x34\x49\x61\x52\x07\xad\x7c\x7c\x56\x44\xd2\x59\xf4\xe3\x24\x18\xbf\x7b\x58\x79\x09\x04\xd2\x48\x83\x18\xbe\x6f\x34\xfc\x33\xad\x64\x33\xf9\x64\x28\x5d\x50\x66\xa5\x06\x3c\xa5\x52\x6d\x08\x58\xb2\x54\x79\xc0\x39\x4b\x44\x91\x96\x1d\x21\x5a\xf7\x72\x84\xa4\xf0\xa5\xd5\x00\x4c\x99\x3e\xe0\xb7\xba\x6d\x55\x9c\xa4\x73\x0f\xd1\xbe\x13\x82\x9f\xaa\x48\x58\x9b\xec\x2b\x5c\x90\x44\x98\x6b\x5d\xca\xce\x18\xf6\x75\x6e\x93\x76\x12\x0d\x8b\x70\x20\xd3\x7d\x53\x3b\xaf\x7d\x6d\x56\x0a\x53\xd2\x65\xc6\x1e\xda\xac\x64\xcf\x2d\x13\xf6\xe8\xf0\xed\xda\xec\x6a\x50\x03\x5e\x97\x93\xad\x74\xdf\xed\xf0\x28\x98\x7c\x3a\xf9\xc4\x05\x17\x6f\xfb\x0a\x01\x53\xc5\xd8\xf0\xcb\x1e\x6c\xe2\x1f\xbb\xb9\xf6\xf4\xff\x4e\x19\x99\xd2\xc8\x72\xeb\xfc\x23\x11\x6c\x28\xb2\xa2\xfe\xfa\x46\x5e\x5c\x3f\x46\x16\x53\x33\x91\x89\xb6\x54\xca\x86\x3e\x6d\x5c\x02\x15\xa5\xb6\x69\xd7\xab\x7e\xb6\x91\x6e\x37\xdd\x1f\x30\x8e\x2c\x6f\xd2\xea\x61\x09\x8d\x7d\x2a\x87\x95\xb2\xd3\xdf\x01\x00\x00\xff\xff\xf5\x6a\x2e\xbe\x9e\x01\x00\x00"
+
+func tmplProto_compileShTmplBytes() ([]byte, error) {
+	return bindataRead(
+		_tmplProto_compileShTmpl,
+		"tmpl/proto_compile.sh.tmpl",
+	)
+}
+
+func tmplProto_compileShTmpl() (*asset, error) {
+	bytes, err := tmplProto_compileShTmplBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "tmpl/proto_compile.sh.tmpl", size: 414, mode: os.FileMode(420), modTime: time.Unix(1492288693, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
 // Asset loads and returns the asset for the given name.
 // It returns an error if the asset could not be found or
 // could not be loaded.
@@ -434,21 +497,24 @@ func AssetNames() []string {
 
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
-	"tmpl/file.tmpl": tmplFileTmpl,
-	"tmpl/gk.json.tmpl": tmplGkJsonTmpl,
-	"tmpl/partials/constants.tmpl": tmplPartialsConstantsTmpl,
-	"tmpl/partials/endpoint_func.tmpl": tmplPartialsEndpoint_funcTmpl,
-	"tmpl/partials/func.tmpl": tmplPartialsFuncTmpl,
+	"tmpl/file.tmpl":                     tmplFileTmpl,
+	"tmpl/gk.json.tmpl":                  tmplGkJsonTmpl,
+	"tmpl/partials/constants.tmpl":       tmplPartialsConstantsTmpl,
+	"tmpl/partials/endpoint_func.tmpl":   tmplPartialsEndpoint_funcTmpl,
+	"tmpl/partials/func.tmpl":            tmplPartialsFuncTmpl,
 	"tmpl/partials/func_parameters.tmpl": tmplPartialsFunc_parametersTmpl,
-	"tmpl/partials/func_results.tmpl": tmplPartialsFunc_resultsTmpl,
-	"tmpl/partials/func_return.tmpl": tmplPartialsFunc_returnTmpl,
-	"tmpl/partials/imports.tmpl": tmplPartialsImportsTmpl,
-	"tmpl/partials/interface.tmpl": tmplPartialsInterfaceTmpl,
-	"tmpl/partials/interface_func.tmpl": tmplPartialsInterface_funcTmpl,
-	"tmpl/partials/interface_stub.tmpl": tmplPartialsInterface_stubTmpl,
-	"tmpl/partials/struct.tmpl": tmplPartialsStructTmpl,
+	"tmpl/partials/func_results.tmpl":    tmplPartialsFunc_resultsTmpl,
+	"tmpl/partials/func_return.tmpl":     tmplPartialsFunc_returnTmpl,
+	"tmpl/partials/imports.tmpl":         tmplPartialsImportsTmpl,
+	"tmpl/partials/interface.tmpl":       tmplPartialsInterfaceTmpl,
+	"tmpl/partials/interface_func.tmpl":  tmplPartialsInterface_funcTmpl,
+	"tmpl/partials/interface_stub.tmpl":  tmplPartialsInterface_stubTmpl,
+	"tmpl/partials/struct.tmpl":          tmplPartialsStructTmpl,
 	"tmpl/partials/struct_function.tmpl": tmplPartialsStruct_functionTmpl,
-	"tmpl/partials/vars.tmpl": tmplPartialsVarsTmpl,
+	"tmpl/partials/vars.tmpl":            tmplPartialsVarsTmpl,
+	"tmpl/proto.pb.tmpl":                 tmplProtoPbTmpl,
+	"tmpl/proto_compile.bat.tmpl":        tmplProto_compileBatTmpl,
+	"tmpl/proto_compile.sh.tmpl":         tmplProto_compileShTmpl,
 }
 
 // AssetDir returns the file names below a certain
@@ -490,25 +556,29 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
+
 var _bintree = &bintree{nil, map[string]*bintree{
 	"tmpl": &bintree{nil, map[string]*bintree{
-		"file.tmpl": &bintree{tmplFileTmpl, map[string]*bintree{}},
+		"file.tmpl":    &bintree{tmplFileTmpl, map[string]*bintree{}},
 		"gk.json.tmpl": &bintree{tmplGkJsonTmpl, map[string]*bintree{}},
 		"partials": &bintree{nil, map[string]*bintree{
-			"constants.tmpl": &bintree{tmplPartialsConstantsTmpl, map[string]*bintree{}},
-			"endpoint_func.tmpl": &bintree{tmplPartialsEndpoint_funcTmpl, map[string]*bintree{}},
-			"func.tmpl": &bintree{tmplPartialsFuncTmpl, map[string]*bintree{}},
+			"constants.tmpl":       &bintree{tmplPartialsConstantsTmpl, map[string]*bintree{}},
+			"endpoint_func.tmpl":   &bintree{tmplPartialsEndpoint_funcTmpl, map[string]*bintree{}},
+			"func.tmpl":            &bintree{tmplPartialsFuncTmpl, map[string]*bintree{}},
 			"func_parameters.tmpl": &bintree{tmplPartialsFunc_parametersTmpl, map[string]*bintree{}},
-			"func_results.tmpl": &bintree{tmplPartialsFunc_resultsTmpl, map[string]*bintree{}},
-			"func_return.tmpl": &bintree{tmplPartialsFunc_returnTmpl, map[string]*bintree{}},
-			"imports.tmpl": &bintree{tmplPartialsImportsTmpl, map[string]*bintree{}},
-			"interface.tmpl": &bintree{tmplPartialsInterfaceTmpl, map[string]*bintree{}},
-			"interface_func.tmpl": &bintree{tmplPartialsInterface_funcTmpl, map[string]*bintree{}},
-			"interface_stub.tmpl": &bintree{tmplPartialsInterface_stubTmpl, map[string]*bintree{}},
-			"struct.tmpl": &bintree{tmplPartialsStructTmpl, map[string]*bintree{}},
+			"func_results.tmpl":    &bintree{tmplPartialsFunc_resultsTmpl, map[string]*bintree{}},
+			"func_return.tmpl":     &bintree{tmplPartialsFunc_returnTmpl, map[string]*bintree{}},
+			"imports.tmpl":         &bintree{tmplPartialsImportsTmpl, map[string]*bintree{}},
+			"interface.tmpl":       &bintree{tmplPartialsInterfaceTmpl, map[string]*bintree{}},
+			"interface_func.tmpl":  &bintree{tmplPartialsInterface_funcTmpl, map[string]*bintree{}},
+			"interface_stub.tmpl":  &bintree{tmplPartialsInterface_stubTmpl, map[string]*bintree{}},
+			"struct.tmpl":          &bintree{tmplPartialsStructTmpl, map[string]*bintree{}},
 			"struct_function.tmpl": &bintree{tmplPartialsStruct_functionTmpl, map[string]*bintree{}},
-			"vars.tmpl": &bintree{tmplPartialsVarsTmpl, map[string]*bintree{}},
+			"vars.tmpl":            &bintree{tmplPartialsVarsTmpl, map[string]*bintree{}},
 		}},
+		"proto.pb.tmpl":          &bintree{tmplProtoPbTmpl, map[string]*bintree{}},
+		"proto_compile.bat.tmpl": &bintree{tmplProto_compileBatTmpl, map[string]*bintree{}},
+		"proto_compile.sh.tmpl":  &bintree{tmplProto_compileShTmpl, map[string]*bintree{}},
 	}},
 }}
 
@@ -558,4 +628,3 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
-
