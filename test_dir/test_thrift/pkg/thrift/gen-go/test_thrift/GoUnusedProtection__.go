@@ -3,5 +3,4 @@
 
 package test_thrift
 
-var GoUnusedProtection__ int;
-
+var GoUnusedProtection__ int
