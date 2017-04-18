@@ -747,6 +747,7 @@ func (sg *GRPCInitGenerator) Generate(name string) error {
 	pwd = strings.Replace(pwd, "\\", "/", -1)
 	projectPath := strings.Replace(pwd, gosrc, "", 1)
 	pbImport := projectPath + "/" + path + defaultFs.FilePathSeparator() + "pb"
+	pbImport = strings.Replace(pbImport, "\\", "/", -1)
 	enpointsPath, err := te.ExecuteString(viper.GetString("endpoints.path"), map[string]string{
 		"ServiceName": name,
 	})
@@ -962,6 +963,7 @@ func (sg *ThriftInitGenerator) Generate(name string) error {
 	projectPath := strings.Replace(pwd, gosrc, "", 1)
 	thriftImport := projectPath + "/" + path + "/" + "gen-go" +
 		"/" + utils.ToLowerSnakeCase(name)
+	thriftImport = strings.Replace(thriftImport, "\\", "/", -1)
 	enpointsPath, err := te.ExecuteString(viper.GetString("endpoints.path"), map[string]string{
 		"ServiceName": name,
 	})
