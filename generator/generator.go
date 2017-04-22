@@ -133,9 +133,36 @@ func (sg *ServiceInitGenerator) Generate(name string) error {
 	if iface == nil {
 		return errors.New(fmt.Sprintf("Could not find the service interface in `%s`", sfile))
 	}
-	if len(iface.Methods) == 0 {
-		return errors.New("The service has no method please implement the interface methods")
+	toKeep := []parser.Method{}
+	for _, v := range iface.Methods {
+		isOk := false
+		for _, p := range v.Parameters {
+			if p.Type == "context.Context" {
+				isOk = true
+				break
+			}
+		}
+		if string(v.Name[0]) == strings.ToLower(string(v.Name[0])) {
+			logrus.Warnf("The method '%s' is private and will be ignored", v.Name)
+			continue
+		}
+		if len(v.Results) == 0 {
+			logrus.Warnf("The method '%s' does not have any return value and will be ignored", v.Name)
+			continue
+		}
+		if !isOk {
+			logrus.Warnf("The method '%s' does not have a context and will be ignored", v.Name)
+		}
+		if isOk {
+			toKeep = append(toKeep, v)
+		}
+
 	}
+	iface.Methods = toKeep
+	if len(iface.Methods) == 0 {
+		return errors.New("The service has no suitable methods please implement the interface methods")
+	}
+
 	stubName, err := te.ExecuteString(viper.GetString("service.struct_name"), map[string]string{
 		"ServiceName": name,
 	})
@@ -716,6 +743,32 @@ func (sg *GRPCInitGenerator) Generate(name string) error {
 	if iface == nil {
 		return errors.New(fmt.Sprintf("Could not find the service interface in `%s`", sfile))
 	}
+	toKeep := []parser.Method{}
+	for _, v := range iface.Methods {
+		isOk := false
+		for _, p := range v.Parameters {
+			if p.Type == "context.Context" {
+				isOk = true
+				break
+			}
+		}
+		if string(v.Name[0]) == strings.ToLower(string(v.Name[0])) {
+			logrus.Warnf("The method '%s' is private and will be ignored", v.Name)
+			continue
+		}
+		if len(v.Results) == 0 {
+			logrus.Warnf("The method '%s' does not have any return value and will be ignored", v.Name)
+			continue
+		}
+		if !isOk {
+			logrus.Warnf("The method '%s' does not have a context and will be ignored", v.Name)
+		}
+		if isOk {
+			toKeep = append(toKeep, v)
+		}
+
+	}
+	iface.Methods = toKeep
 	if len(iface.Methods) == 0 {
 		return errors.New("The service has no method please implement the interface methods")
 	}
@@ -929,6 +982,32 @@ func (sg *ThriftInitGenerator) Generate(name string) error {
 	if iface == nil {
 		return errors.New(fmt.Sprintf("Could not find the service interface in `%s`", sfile))
 	}
+	toKeep := []parser.Method{}
+	for _, v := range iface.Methods {
+		isOk := false
+		for _, p := range v.Parameters {
+			if p.Type == "context.Context" {
+				isOk = true
+				break
+			}
+		}
+		if string(v.Name[0]) == strings.ToLower(string(v.Name[0])) {
+			logrus.Warnf("The method '%s' is private and will be ignored", v.Name)
+			continue
+		}
+		if len(v.Results) == 0 {
+			logrus.Warnf("The method '%s' does not have any return value and will be ignored", v.Name)
+			continue
+		}
+		if !isOk {
+			logrus.Warnf("The method '%s' does not have a context and will be ignored", v.Name)
+		}
+		if isOk {
+			toKeep = append(toKeep, v)
+		}
+
+	}
+	iface.Methods = toKeep
 	if len(iface.Methods) == 0 {
 		return errors.New("The service has no method please implement the interface methods")
 	}
@@ -1154,6 +1233,32 @@ func (sg *AddGRPCGenerator) Generate(name string) error {
 	if iface == nil {
 		return errors.New(fmt.Sprintf("Could not find the service interface in `%s`", sfile))
 	}
+	toKeep := []parser.Method{}
+	for _, v := range iface.Methods {
+		isOk := false
+		for _, p := range v.Parameters {
+			if p.Type == "context.Context" {
+				isOk = true
+				break
+			}
+		}
+		if string(v.Name[0]) == strings.ToLower(string(v.Name[0])) {
+			logrus.Warnf("The method '%s' is private and will be ignored", v.Name)
+			continue
+		}
+		if len(v.Results) == 0 {
+			logrus.Warnf("The method '%s' does not have any return value and will be ignored", v.Name)
+			continue
+		}
+		if !isOk {
+			logrus.Warnf("The method '%s' does not have a context and will be ignored", v.Name)
+		}
+		if isOk {
+			toKeep = append(toKeep, v)
+		}
+
+	}
+	iface.Methods = toKeep
 	if len(iface.Methods) == 0 {
 		return errors.New("The service has no method please implement the interface methods")
 	}
@@ -1214,6 +1319,32 @@ func (sg *AddHttpGenerator) Generate(name string) error {
 	if iface == nil {
 		return errors.New(fmt.Sprintf("Could not find the service interface in `%s`", sfile))
 	}
+	toKeep := []parser.Method{}
+	for _, v := range iface.Methods {
+		isOk := false
+		for _, p := range v.Parameters {
+			if p.Type == "context.Context" {
+				isOk = true
+				break
+			}
+		}
+		if string(v.Name[0]) == strings.ToLower(string(v.Name[0])) {
+			logrus.Warnf("The method '%s' is private and will be ignored", v.Name)
+			continue
+		}
+		if len(v.Results) == 0 {
+			logrus.Warnf("The method '%s' does not have any return value and will be ignored", v.Name)
+			continue
+		}
+		if !isOk {
+			logrus.Warnf("The method '%s' does not have a context and will be ignored", v.Name)
+		}
+		if isOk {
+			toKeep = append(toKeep, v)
+		}
+
+	}
+	iface.Methods = toKeep
 	if len(iface.Methods) == 0 {
 		return errors.New("The service has no method please implement the interface methods")
 	}
@@ -1274,6 +1405,32 @@ func (sg *AddThriftGenerator) Generate(name string) error {
 	if iface == nil {
 		return errors.New(fmt.Sprintf("Could not find the service interface in `%s`", sfile))
 	}
+	toKeep := []parser.Method{}
+	for _, v := range iface.Methods {
+		isOk := false
+		for _, p := range v.Parameters {
+			if p.Type == "context.Context" {
+				isOk = true
+				break
+			}
+		}
+		if string(v.Name[0]) == strings.ToLower(string(v.Name[0])) {
+			logrus.Warnf("The method '%s' is private and will be ignored", v.Name)
+			continue
+		}
+		if len(v.Results) == 0 {
+			logrus.Warnf("The method '%s' does not have any return value and will be ignored", v.Name)
+			continue
+		}
+		if !isOk {
+			logrus.Warnf("The method '%s' does not have a context and will be ignored", v.Name)
+		}
+		if isOk {
+			toKeep = append(toKeep, v)
+		}
+
+	}
+	iface.Methods = toKeep
 	if len(iface.Methods) == 0 {
 		return errors.New("The service has no method please implement the interface methods")
 	}

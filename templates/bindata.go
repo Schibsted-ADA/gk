@@ -560,27 +560,27 @@ func AssetNames() []string {
 
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
-	"tmpl/file.tmpl": tmplFileTmpl,
-	"tmpl/gk.json.tmpl": tmplGkJsonTmpl,
-	"tmpl/partials/constants.tmpl": tmplPartialsConstantsTmpl,
-	"tmpl/partials/endpoint_func.tmpl": tmplPartialsEndpoint_funcTmpl,
-	"tmpl/partials/func.tmpl": tmplPartialsFuncTmpl,
+	"tmpl/file.tmpl":                     tmplFileTmpl,
+	"tmpl/gk.json.tmpl":                  tmplGkJsonTmpl,
+	"tmpl/partials/constants.tmpl":       tmplPartialsConstantsTmpl,
+	"tmpl/partials/endpoint_func.tmpl":   tmplPartialsEndpoint_funcTmpl,
+	"tmpl/partials/func.tmpl":            tmplPartialsFuncTmpl,
 	"tmpl/partials/func_parameters.tmpl": tmplPartialsFunc_parametersTmpl,
-	"tmpl/partials/func_results.tmpl": tmplPartialsFunc_resultsTmpl,
-	"tmpl/partials/func_return.tmpl": tmplPartialsFunc_returnTmpl,
-	"tmpl/partials/imports.tmpl": tmplPartialsImportsTmpl,
-	"tmpl/partials/interface.tmpl": tmplPartialsInterfaceTmpl,
-	"tmpl/partials/interface_func.tmpl": tmplPartialsInterface_funcTmpl,
-	"tmpl/partials/interface_stub.tmpl": tmplPartialsInterface_stubTmpl,
-	"tmpl/partials/struct.tmpl": tmplPartialsStructTmpl,
+	"tmpl/partials/func_results.tmpl":    tmplPartialsFunc_resultsTmpl,
+	"tmpl/partials/func_return.tmpl":     tmplPartialsFunc_returnTmpl,
+	"tmpl/partials/imports.tmpl":         tmplPartialsImportsTmpl,
+	"tmpl/partials/interface.tmpl":       tmplPartialsInterfaceTmpl,
+	"tmpl/partials/interface_func.tmpl":  tmplPartialsInterface_funcTmpl,
+	"tmpl/partials/interface_stub.tmpl":  tmplPartialsInterface_stubTmpl,
+	"tmpl/partials/struct.tmpl":          tmplPartialsStructTmpl,
 	"tmpl/partials/struct_function.tmpl": tmplPartialsStruct_functionTmpl,
-	"tmpl/partials/vars.tmpl": tmplPartialsVarsTmpl,
-	"tmpl/proto.pb.tmpl": tmplProtoPbTmpl,
-	"tmpl/proto_compile.bat.tmpl": tmplProto_compileBatTmpl,
-	"tmpl/proto_compile.sh.tmpl": tmplProto_compileShTmpl,
-	"tmpl/svc.thrift.tmpl": tmplSvcThriftTmpl,
-	"tmpl/thrift_compile.bat.tmpl": tmplThrift_compileBatTmpl,
-	"tmpl/thrift_compile.sh.tmpl": tmplThrift_compileShTmpl,
+	"tmpl/partials/vars.tmpl":            tmplPartialsVarsTmpl,
+	"tmpl/proto.pb.tmpl":                 tmplProtoPbTmpl,
+	"tmpl/proto_compile.bat.tmpl":        tmplProto_compileBatTmpl,
+	"tmpl/proto_compile.sh.tmpl":         tmplProto_compileShTmpl,
+	"tmpl/svc.thrift.tmpl":               tmplSvcThriftTmpl,
+	"tmpl/thrift_compile.bat.tmpl":       tmplThrift_compileBatTmpl,
+	"tmpl/thrift_compile.sh.tmpl":        tmplThrift_compileShTmpl,
 }
 
 // AssetDir returns the file names below a certain
@@ -622,31 +622,32 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
+
 var _bintree = &bintree{nil, map[string]*bintree{
 	"tmpl": &bintree{nil, map[string]*bintree{
-		"file.tmpl": &bintree{tmplFileTmpl, map[string]*bintree{}},
+		"file.tmpl":    &bintree{tmplFileTmpl, map[string]*bintree{}},
 		"gk.json.tmpl": &bintree{tmplGkJsonTmpl, map[string]*bintree{}},
 		"partials": &bintree{nil, map[string]*bintree{
-			"constants.tmpl": &bintree{tmplPartialsConstantsTmpl, map[string]*bintree{}},
-			"endpoint_func.tmpl": &bintree{tmplPartialsEndpoint_funcTmpl, map[string]*bintree{}},
-			"func.tmpl": &bintree{tmplPartialsFuncTmpl, map[string]*bintree{}},
+			"constants.tmpl":       &bintree{tmplPartialsConstantsTmpl, map[string]*bintree{}},
+			"endpoint_func.tmpl":   &bintree{tmplPartialsEndpoint_funcTmpl, map[string]*bintree{}},
+			"func.tmpl":            &bintree{tmplPartialsFuncTmpl, map[string]*bintree{}},
 			"func_parameters.tmpl": &bintree{tmplPartialsFunc_parametersTmpl, map[string]*bintree{}},
-			"func_results.tmpl": &bintree{tmplPartialsFunc_resultsTmpl, map[string]*bintree{}},
-			"func_return.tmpl": &bintree{tmplPartialsFunc_returnTmpl, map[string]*bintree{}},
-			"imports.tmpl": &bintree{tmplPartialsImportsTmpl, map[string]*bintree{}},
-			"interface.tmpl": &bintree{tmplPartialsInterfaceTmpl, map[string]*bintree{}},
-			"interface_func.tmpl": &bintree{tmplPartialsInterface_funcTmpl, map[string]*bintree{}},
-			"interface_stub.tmpl": &bintree{tmplPartialsInterface_stubTmpl, map[string]*bintree{}},
-			"struct.tmpl": &bintree{tmplPartialsStructTmpl, map[string]*bintree{}},
+			"func_results.tmpl":    &bintree{tmplPartialsFunc_resultsTmpl, map[string]*bintree{}},
+			"func_return.tmpl":     &bintree{tmplPartialsFunc_returnTmpl, map[string]*bintree{}},
+			"imports.tmpl":         &bintree{tmplPartialsImportsTmpl, map[string]*bintree{}},
+			"interface.tmpl":       &bintree{tmplPartialsInterfaceTmpl, map[string]*bintree{}},
+			"interface_func.tmpl":  &bintree{tmplPartialsInterface_funcTmpl, map[string]*bintree{}},
+			"interface_stub.tmpl":  &bintree{tmplPartialsInterface_stubTmpl, map[string]*bintree{}},
+			"struct.tmpl":          &bintree{tmplPartialsStructTmpl, map[string]*bintree{}},
 			"struct_function.tmpl": &bintree{tmplPartialsStruct_functionTmpl, map[string]*bintree{}},
-			"vars.tmpl": &bintree{tmplPartialsVarsTmpl, map[string]*bintree{}},
+			"vars.tmpl":            &bintree{tmplPartialsVarsTmpl, map[string]*bintree{}},
 		}},
-		"proto.pb.tmpl": &bintree{tmplProtoPbTmpl, map[string]*bintree{}},
-		"proto_compile.bat.tmpl": &bintree{tmplProto_compileBatTmpl, map[string]*bintree{}},
-		"proto_compile.sh.tmpl": &bintree{tmplProto_compileShTmpl, map[string]*bintree{}},
-		"svc.thrift.tmpl": &bintree{tmplSvcThriftTmpl, map[string]*bintree{}},
+		"proto.pb.tmpl":           &bintree{tmplProtoPbTmpl, map[string]*bintree{}},
+		"proto_compile.bat.tmpl":  &bintree{tmplProto_compileBatTmpl, map[string]*bintree{}},
+		"proto_compile.sh.tmpl":   &bintree{tmplProto_compileShTmpl, map[string]*bintree{}},
+		"svc.thrift.tmpl":         &bintree{tmplSvcThriftTmpl, map[string]*bintree{}},
 		"thrift_compile.bat.tmpl": &bintree{tmplThrift_compileBatTmpl, map[string]*bintree{}},
-		"thrift_compile.sh.tmpl": &bintree{tmplThrift_compileShTmpl, map[string]*bintree{}},
+		"thrift_compile.sh.tmpl":  &bintree{tmplThrift_compileShTmpl, map[string]*bintree{}},
 	}},
 }}
 
@@ -696,4 +697,3 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
-
