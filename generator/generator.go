@@ -269,7 +269,7 @@ func (sg *ServiceInitGenerator) generateHttpTransport(name string, iface *parser
 		handlerFile.Methods = append(handlerFile.Methods, parser.NewMethodWithComment(
 			fmt.Sprintf("Decode%sRequest", m.Name),
 			fmt.Sprintf(`Decode%sRequest is a transport/http.DecodeRequestFunc that decodes a
-					 JSON-encoded sum request from the HTTP request body. Primarily useful in a server.`,
+					 JSON-encoded request from the HTTP request body. Primarily useful in a server.`,
 				m.Name),
 			parser.NamedTypeValue{},
 			fmt.Sprintf(`req = endpoints.%sRequest{}
@@ -646,8 +646,8 @@ func (sg *ServiceInitGenerator) generateEndpoints(name string, iface *parser.Int
 		}
 		file.Methods = append(file.Methods, parser.NewMethodWithComment(
 			"Make"+v.Name+"Endpoint",
-			fmt.Sprintf(`Make%sEndpoint returns an endpoint that invokes Sum on the service.
-				  Primarily useful in a server.`, v.Name),
+			fmt.Sprintf(`Make%sEndpoint returns an endpoint that invokes %s on the service.
+				  Primarily useful in a server.`, v.Name, v.Name),
 			parser.NamedTypeValue{},
 			tRes,
 			[]parser.NamedTypeValue{
