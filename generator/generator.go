@@ -291,7 +291,6 @@ func (sg *ServiceInitGenerator) generateHttpTransport(name string, iface *parser
 			parser.NamedTypeValue{},
 			` w.Header().Set("Content-Type", "application/json; charset=utf-8")
 			err = json.NewEncoder(w).Encode(response)
-			json.NewEncoder(w).Encode(response)
 			return err`,
 			[]parser.NamedTypeValue{
 				parser.NewNameType("_", "context.Context"),
